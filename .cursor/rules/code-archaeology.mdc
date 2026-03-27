@@ -42,3 +42,8 @@ Update docs in the same effort:
 - undocumented behavior -> `docs/technical/undocumented-behaviors.md` + summary in `docs/memory/systemPatterns.md`
 - reusable archaeology heuristics -> `docs/technical/code-archaeology-patterns.md`
 - current status / backlog -> `docs/memory/progress.md` or `docs/memory/activeContext.md`
+
+## How to verify
+
+- Same as Memory Bank rule: memory and technical layers updated when investigation changes shared truth.
+- Grep for newly documented contracts in `docs/technical/undocumented-behaviors.md` or `code-archaeology-patterns.md` when archaeology task completed.

@@ -33,10 +33,7 @@ const createMockAPI = ({
       getAppState: () => state,
       onStateChange: observer.onStateChange,
       getSceneElements: () => elements,
-    } as Pick<
-      ExcalidrawImperativeAPI,
-      "isDestroyed" | "getAppState" | "onStateChange" | "getSceneElements"
-    > as ExcalidrawImperativeAPI,
+    } as unknown as ExcalidrawImperativeAPI,
     updateAppState: (partial: Partial<AppState>) => {
       const prevState = state;
       state = { ...state, ...partial };

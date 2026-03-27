@@ -42,3 +42,8 @@ Update docs in the same effort:
 - undocumented behavior -> `docs/technical/undocumented-behaviors.md` + summary in `docs/memory/systemPatterns.md`
 - reusable archaeology heuristics -> `docs/technical/code-archaeology-patterns.md`
 - current status / backlog -> `docs/memory/progress.md` or `docs/memory/activeContext.md`
+
+## How to verify
+
+- Before merge: for non-trivial behavior edits, spot-check that `docs/memory/systemPatterns.md` / `activeContext.md` still match the stated constraints.
+- Confirm cross-links: memory summaries point to `docs/technical/*` for proofs, not duplicate full narratives.

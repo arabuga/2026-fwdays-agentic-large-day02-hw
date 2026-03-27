@@ -1,4 +1,4 @@
-safe-refactor.mdc---
+---
 description: Refactor carefully in legacy and brownfield areas
 globs:
   - "**/*.ts"
@@ -41,3 +41,8 @@ This codebase may contain legacy constraints, hidden contracts, and behavior-sen
 - Do not rewrite broad subsystems without explicit need.
 - Do not replace nuanced flow with generic abstractions unless verified against real behavior.
 - Do not remove legacy-looking logic just because it appears redundant.
+
+## How to verify
+
+- Refactor PR references invariants (undo, ordering, caches) and links to `systemPatterns.md` / technical docs when behavior is subtle.
+- Intentional behavior changes include ADR or `decisionLog.md` updates per rule.

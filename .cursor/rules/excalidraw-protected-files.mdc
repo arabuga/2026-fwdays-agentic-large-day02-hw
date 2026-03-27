@@ -18,3 +18,8 @@ Changes to protected files require:
 1. Full understanding of dependencies
 2. Running complete test suite
 3. Manual QA verification
+
+## How to verify
+
+- Diff excludes `packages/excalidraw/scene/renderer.ts`, `packages/excalidraw/data/restore.ts`, `packages/excalidraw/actions/manager.ts`, `packages/excalidraw/types.ts` unless the task explicitly approved touching them.
+- If one of these files changed: confirm full test suite run and note manual QA in PR.
