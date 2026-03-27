@@ -1,0 +1,52 @@
+---
+alwaysApply: true
+---
+---
+description: Security and safety constraints for Excalidraw code changes
+globs:
+  - "packages/**/*.ts"
+  - "packages/**/*.tsx"
+  - "excalidraw-app/**/*.ts"
+  - "excalidraw-app/**/*.tsx"
+alwaysApply: false
+---
+
+# Security and Safety Constraints
+
+## Context
+
+This codebase includes browser-facing code, shared packages, and behavior-sensitive logic.
+Unsafe shortcuts, direct DOM access, unchecked imports, or silent bypasses can introduce fragile behavior, security risk, or long-term maintenance debt.
+
+## Rule
+
+- NEVER introduce new dependencies without explicit approval
+- NEVER use `eval`, `Function`, or similar dynamic code execution
+- NEVER bypass type safety with `any` or `@ts-ignore` unless explicitly justified
+- NEVER access DOM directly with `document.getElementById` if React refs or existing patterns are available
+- NEVER introduce inline scripts or unsafe HTML rendering patterns without clear need and review
+- DO NOT add network calls, storage usage, or browser APIs without checking existing project patterns
+- DO NOT weaken validation, sanitization, or permission checks
+- AVOID hidden side effects in shared utilities
+- AVOID changes that silently expand the trust boundary of the application
+
+## How to verify
+
+1. Search changed files for:
+   - `eval`
+   - `Function(`
+   - `@ts-ignore`
+   - `any`
+   - `document.getElementById`
+   - unsafe DOM manipulation
+2. Check whether any new dependency was added to package manifests
+3. Check whether any new browser API usage follows existing project patterns
+4. Check whether the change introduces unsafe shortcuts instead of project-approved abstractions
+5. Confirm that no trust boundary was widened without explicit discussion
+
+## Notes
+
+When unsure:
+- prefer existing utilities and patterns
+- prefer explicit review over clever shortcuts
+- treat security-sensitive changes as high risk

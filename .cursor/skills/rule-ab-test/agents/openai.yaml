@@ -1,0 +1,14 @@
+interface:
+  display_name: Rule AB Test
+  short_description: Run and record A/B validation for one Cursor rule
+  category: engineering
+  icon: flask
+  accent_color: "#4F46E5"
+
+policy:
+  products:
+    - chatgpt
+    - codex
+    - api
+    - atlas
+  allow_implicit_invocation: true
