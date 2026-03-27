@@ -34,3 +34,8 @@ For non-trivial tasks, structure responses like this:
 
 Be concise but explicit.
 Prefer grounded statements over confident guesses.
+
+## How to verify
+
+- For non-trivial assistant replies, scan for the six sections: Understanding, Findings, Plan, Changes, Validation, Follow-up (headings or clear equivalents).
+- Ensure risks/unknowns are explicit, not smoothed over.

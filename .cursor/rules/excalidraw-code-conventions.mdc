@@ -23,3 +23,8 @@ alwaysApply: false
 
 - kebab-case for files: `element-utils.ts`
 - PascalCase for components: `LayerUI.tsx`
+
+## How to verify
+
+- Run `yarn test:code` / `yarn fix` on touched TS/TSX; no new `any` or `@ts-ignore` without justification.
+- New components use named exports, colocated `*.test.tsx`, and props type `{Name}Props` where applicable.

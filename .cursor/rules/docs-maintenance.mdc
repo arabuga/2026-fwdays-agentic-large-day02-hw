@@ -42,3 +42,9 @@ When completing a task, explicitly state:
 - Do not leave newly discovered behavior only in chat output.
 - Do not create duplicate truths in multiple files.
 - Do not put deep implementation detail into memory files unless it is operationally critical.
+
+## How to verify
+
+- On tasks that establish facts: confirm matching edits (or explicit backlog) in `docs/memory/*` or `docs/technical/*` per rule targets.
+- Response or PR description includes: code delta, docs updated, docs still missing, open uncertainties.
+- No new “second canonical” long explanations in memory; deep detail stays in technical docs with links from memory.

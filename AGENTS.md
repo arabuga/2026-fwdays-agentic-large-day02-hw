@@ -18,16 +18,12 @@ Excalidraw is a **monorepo** with a clear separation between the core library an
 
 ## Development Commands
 
-
-<CodeBlockWrapper v-bind="{}" :ranges='[]'>
-
 ```bash
 yarn test:typecheck  # TypeScript type checking
 yarn test:update     # Run all tests (with snapshot updates)
 yarn fix             # Auto-fix formatting and linting issues
+yarn build           # Production build (app + packages as configured)
 ```
-
-</CodeBlockWrapper>
 
 ## Architecture Notes
 
@@ -90,6 +86,7 @@ Custom commands:
 
 - /review-code — analyze code quality and architecture alignment
 - /create-component — generate component following conventions
+- /run-rule-ab-test — A/B validation for one `.mdc` rule (see `.cursor/commands/run-rule-ab-test.md`)
 
 ---
 
