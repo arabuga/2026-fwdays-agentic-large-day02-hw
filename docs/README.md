@@ -1,10 +1,13 @@
-﻿# Docs
+# Docs
 
 ## Details
 
 ### Technical Details
 For system architecture, components and data flow:
 → docs/technical/architecture.md
+
+For Cursor **MCP** (Context7 and how to verify):
+→ docs/technical/mcp.md
 
 Use when:
 - modifying system structure
