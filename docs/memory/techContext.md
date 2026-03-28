@@ -7,6 +7,7 @@ For architecture, APIs, setup and infrastructure:
 - ../technical/architecture.md
 - ../technical/api-reference.md
 - ../technical/dev-setup.md
+- ../technical/mcp.md
 - ../technical/infrastructure.md
 
 Use when:
@@ -89,7 +90,7 @@ Verified against root `package.json`, `excalidraw-app/package.json`, and `packag
 
 ## Optional tooling
 
-- **Context7 MCP** (Cursor): project `.cursor/mcp.json` points at [Context7](https://github.com/upstash/context7) remote MCP for library docs; see `docs/technical/dev-setup.md`.
+- **MCP (Cursor)**: project [`.cursor/mcp.json`](../../.cursor/mcp.json) registers **Context7** for library docs; full checklist and optional Browser/GitHub notes in [`docs/technical/mcp.md`](../technical/mcp.md) (dev quickstart still in [`dev-setup.md`](../technical/dev-setup.md)).
 - **CodeGraphContext**: `scripts/cgc.ps1`, see `docs/reference/codegraphcontext.md` and `docs/technical/dev-setup.md`.
 - **Repomix** (`npx repomix`): single-file pack; no `packages/excalidraw/src/` in this tree â€” use globs like `packages/excalidraw/**/*.ts`; ignore `repomix-*.txt` / `repomix-output.xml` when doing full-repo `--compress` to avoid nesting huge artifacts.
 

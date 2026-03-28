@@ -29,12 +29,12 @@ This script routes CGC state into local `.cgc_home` to avoid profile permission 
 
 For current CGC status and value, see `docs/reference/codegraphcontext.md`.
 
-## Optional: Context7 MCP (library docs)
+## Optional: MCP (Context7 and more)
 
-This repo includes project-level [Model Context Protocol](https://docs.cursor.com/context/model-context-protocol) config at `.cursor/mcp.json` for [Context7](https://github.com/upstash/context7): up-to-date library documentation via MCP tools (`resolve-library-id`, `query-docs`).
+Full narrative, verification steps, and optional Browser/GitHub notes:
 
-- After opening the project in Cursor, enable the **context7** MCP server if it is not on by default.
-- For higher rate limits, add a free API key from [context7.com/dashboard](https://context7.com/dashboard) using the [remote server headers](https://context7.com/docs/resources/all-clients) or run `npx ctx7 setup --cursor` locally.
-- Alternative: local MCP via `npx -y @upstash/context7-mcp` (see Context7 docs).
+→ **[`docs/technical/mcp.md`](mcp.md)**
+
+Short version: this repo ships `.cursor/mcp.json` with the **context7** remote server. In Cursor, enable **context7** under MCP settings. For rate limits / auth: [context7.com/dashboard](https://context7.com/dashboard), [Context7 clients](https://context7.com/docs/resources/all-clients), or `npx ctx7 setup --cursor`.
 
 
