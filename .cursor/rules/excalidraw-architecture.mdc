@@ -1,0 +1,30 @@
+---
+description: "Architecture constraints for Excalidraw"
+globs: packages/excalidraw/**
+alwaysApply: false
+---
+
+# Excalidraw Architecture
+
+## State Management
+
+- Custom state via actionManager - NOT Redux/Zustand/MobX
+- State updates: actionManager.dispatch() ONLY
+- State type: AppState (packages/excalidraw/types.ts)
+
+## Rendering
+
+- Canvas 2D rendering - NOT React DOM for drawing
+- Render pipeline: Scene -> renderScene() -> canvas context
+- DO NOT use react-konva, fabric.js, pixi.js
+
+## Dependencies
+
+- No new npm packages without explicit approval
+- Check packages/utils/ before adding external helpers
+
+## How to verify
+
+- Search changed files for forbidden state libs: `Redux`, `Zustand`, `MobX`, `jotai` imports used as editor state (Jotai helpers must follow existing wrapper rules).
+- Confirm updates to scene/editor state go through `actionManager.dispatch()` patterns, not ad-hoc global stores.
+- Ensure canvas work stays in the existing render pipeline; grep for disallowed render libs (`react-konva`, `fabric`, `pixi`) only if rendering approach changes.
