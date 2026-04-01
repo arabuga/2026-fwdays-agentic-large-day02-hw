@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""Scaffold A/B rule-test folders under docs/technical/ab-tests/.
+
+Creates prompt.txt, empty result files, notes template, and ensures README.
+Used by the rule-ab-test Cursor skill workflow."""
 from __future__ import annotations
 
 import argparse
@@ -47,6 +51,7 @@ Rules:
 
 
 def rule_dir_name(rule_path: Path) -> str:
+    """Return directory name for a rule file (strip .mdc / .mdc.off suffix)."""
     name = rule_path.name
     if name.endswith(".mdc.off"):
         return name[:-8]
@@ -56,6 +61,7 @@ def rule_dir_name(rule_path: Path) -> str:
 
 
 def main() -> int:
+    """Parse CLI args and create scenario directory layout; print scenario path."""
     p = argparse.ArgumentParser()
     p.add_argument("--repo-root", required=True)
     p.add_argument("--rule-path", required=True)

@@ -1,123 +1,109 @@
 # AGENTS.md
 
+## Project Overview
+
+This repository is an **Excalidraw** fork: an open-source collaborative whiteboard (hand-drawn style) shipped as a **Yarn monorepo**. The core editor lives in `packages/excalidraw/`; the full web app (Vite, PWA, collab shell) is in `excalidraw-app/`. Agents should respect Excalidraw’s documented state and rendering model (see Architecture and Do-Not-Touch).
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Language | TypeScript (strict) |
+| UI | React 19 (app); library peers React 17–19 |
+| Monorepo | Yarn 1.x workspaces |
+| App bundler | Vite 5 |
+| Tests | Vitest, Testing Library, jsdom |
+| Package builds | esbuild (packages) |
+| Styles | SCSS (editor package) |
+
+Node **≥ 18**; use **yarn** (not npm) for install and scripts.
+
 ## Project Structure
 
-Excalidraw is a **monorepo** with a clear separation between the core library and the application:
+- **`packages/excalidraw/`** — main library (`@excalidraw/excalidraw`), published to npm.
+- **`excalidraw-app/`** — standalone app (excalidraw.com–style), Vite entry, collaboration UI.
+- **`packages/common/`**, **`packages/element/`**, **`packages/math/`**, **`packages/utils/`** — shared packages (`@excalidraw/*`).
+- **`examples/`** — integration examples (e.g. Next.js, browser script).
+- **`.cursor/`** — Cursor rules, commands, skills, MCP config for agent workflows.
+- **`docs/memory/`**, **`docs/technical/`** — Memory Bank and technical documentation.
 
-- **`packages/excalidraw/`** - Main React component library published to npm as `@excalidraw/excalidraw`
-- **`excalidraw-app/`** - Full-featured web application (excalidraw.com) that uses the library
-- **`packages/`** - Core packages: `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, `@excalidraw/utils`
-- **`examples/`** - Integration examples (NextJS, browser script)
-
-## Development Workflow
-
-1. **Package Development**: Work in `packages/*` for editor features
-2. **App Development**: Work in `excalidraw-app/` for app-specific features
-3. **Testing**: Always run `yarn test:update` before committing
-4. **Type Safety**: Use `yarn test:typecheck` to verify TypeScript
-
-## Development Commands
+## Key Commands
 
 ```bash
-yarn test:typecheck  # TypeScript type checking
-yarn test:update     # Run all tests (with snapshot updates)
-yarn fix             # Auto-fix formatting and linting issues
-yarn build           # Production build (app + packages as configured)
+yarn                 # install workspaces
+yarn start           # Vite dev server (excalidraw-app)
+yarn build           # production app build
+yarn build:packages  # build all packages
+yarn test            # Vitest (watch)
+yarn test:all        # typecheck + lint + format + tests
+yarn test:typecheck  # tsc
+yarn fix             # Prettier + ESLint --fix
 ```
 
-## Architecture Notes
+Before commits, prefer **`yarn test:update`** or **`yarn test:all`** per team policy.
 
-### Package System
+## Architecture
 
-- Uses Yarn workspaces for monorepo management
-- Internal packages use path aliases (see `vitest.config.mts`)
-- Build system uses esbuild for packages, Vite for the app
-- TypeScript throughout with strict configuration
+- **Orchestration:** `packages/excalidraw/components/App.tsx` coordinates scene, store, history, and `ActionManager`.
+- **State:** Editor state flows through the existing action pipeline; **do not** add Redux, Zustand, MobX, or parallel global stores for core editor state.
+- **Mutations:** Prefer **`actionManager.dispatch()`** (and related patterns) for user-visible changes.
+- **Rendering:** Drawing is **canvas-based** (Rough.js, layered canvases), not React DOM for the canvas.
+- **Collaboration / app shell:** Firebase, Socket.io, Jotai for app-level concerns live primarily under `excalidraw-app/`; in `packages/excalidraw`, follow the **no direct `jotai` import** rule (use project wrappers where applicable).
 
----
+### Development workflow
 
-## Rules
+1. Library features: work under `packages/*`.
+2. App-only features: work under `excalidraw-app/`.
+3. Run typecheck and tests before pushing.
 
-All rules are defined in:
-.cursor/rules/*.mdc
+## Conventions
 
-Rule categories:
-- architecture — state management, rendering constraints
-- conventions — code style, exports, typing
-- do-not-touch — protected files
-- testing — validation rules
-- memory — documentation updates
+- **Rules:** All agent-facing guardrails live in **`.cursor/rules/*.mdc`** (architecture, security, memory bank, docs maintenance, etc.). Follow them in generated code and refactors.
+- **Code style:** TypeScript strict, ESLint/Prettier as configured; match existing file layout (no invented `packages/excalidraw/src/` tree).
+- **Exports / naming:** Follow **`excalidraw-code-conventions.mdc`** (e.g. export patterns, file naming).
+- **Documentation:** Non-trivial behavior changes should update **`docs/memory/*`** and **`docs/technical/*`** per **`memory-bank.mdc`** / **`docs-maintenance.mdc`**.
+- **PRs:** Small, reviewable diffs; reference protected files and testing when touching risky areas.
 
-Rules MUST be followed in all generated code.
+## Do-Not-Touch / Constraints
 
----
+**Protected files** (require explicit approval, full tests, manual QA if changed):
 
-## Architecture Constraints (Critical)
+- `packages/excalidraw/scene/renderer.ts`
+- `packages/excalidraw/data/restore.ts`
+- `packages/excalidraw/actions/manager.ts`
+- `packages/excalidraw/types.ts`
 
-- State updates ONLY via `actionManager.dispatch()`
-- DO NOT introduce Redux, Zustand, MobX or other state managers
-- Canvas rendering ONLY (NOT React DOM for drawing)
-- Respect existing types from `packages/excalidraw/types.ts`
+**General guardrails:**
 
----
-
-## Guardrails
-
-- NEVER modify protected files without explicit understanding
-- NEVER introduce new dependencies without approval
-- NEVER break undocumented behaviors
-- ALWAYS follow safe refactor boundaries
+- Do **not** add dependencies without explicit approval.
+- Do **not** use `eval`, dynamic `Function`, or weaken security validations without review.
+- Preserve undo/history, event ordering, and cache contracts documented in Memory Bank when refactoring.
 
 ---
+
+## Rules (Cursor)
+
+Defined in `.cursor/rules/*.mdc` — categories include architecture, conventions, protected files, testing, memory, security.
+
+## Custom commands
+
+- `/review-code` — `.cursor/commands/review-code.md`
+- `/create-component` — `.cursor/commands/create-component.md`
+- `/run-rule-ab-test` — `.cursor/commands/run-rule-ab-test.md`
 
 ## Skills
 
-Agent can use the following skills:
-
-- build-verify — ensure project builds successfully
-- codebase-explore — understand unfamiliar code
-- memory-bank-update — sync documentation after changes
-
----
-
-## Commands
-
-Custom commands:
-
-- /review-code — analyze code quality and architecture alignment
-- /create-component — generate component following conventions
-- /run-rule-ab-test — A/B validation for one `.mdc` rule (see `.cursor/commands/run-rule-ab-test.md`)
-
----
+- `build-verify`, `codebase-explore`, `memory-bank-update`, `excalidraw-ref`, `rule-ab-test` — see `.cursor/skills/`.
 
 ## Memory Bank
 
-Documentation is stored in:
-
-- docs/memory/*
-- docs/technical/*
-
-Rules:
-- Memory layer = short operational summaries
-- Technical layer = detailed behavior
-- ALWAYS update memory after significant changes
-
----
+Short operational context: `docs/memory/*`. Deep detail: `docs/technical/*`, `docs/product/*`.
 
 ## Validation
 
-All rules must be validated using:
+- Rule behavior: A/B tests under `docs/technical/ab-tests/` and index in `docs/technical/rule-validation.md`.
+- Build: `yarn build` / `yarn test:all` as appropriate.
 
-- A/B testing (rule ON vs OFF)
-- build success (`yarn test:update`)
-- type safety (`yarn test:typecheck`)
+## Agent goal
 
----
-
-## Agent Goal
-
-Ensure generated code:
-- follows real Excalidraw architecture
-- avoids hallucinated APIs
-- respects constraints and patterns
-- integrates cleanly into existing codebase
+Generated code should match real Excalidraw APIs and patterns, respect constraints above, and integrate without hallucinated APIs or parallel state frameworks.

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""Append one A/B scenario entry to docs/technical/rule-validation.md.
+
+Ensures the validation file exists with a header, then appends links to
+prompt, result A/B, and notes for the given scenario directory."""
 from __future__ import annotations
 
 import argparse
@@ -19,12 +23,14 @@ Purpose:
 
 
 def ensure_file(path: Path) -> None:
+    """Create parent dirs and seed rule-validation.md with HEADER if missing."""
     path.parent.mkdir(parents=True, exist_ok=True)
     if not path.exists():
         path.write_text(HEADER, encoding="utf-8")
 
 
 def relpath(from_file: Path, to_file: Path) -> str:
+    """POSIX relative path from from_file's directory to to_file."""
     import os
     return Path(os.path.relpath(to_file.resolve(), from_file.parent.resolve())).as_posix()
 
@@ -37,6 +43,7 @@ def append_entry(
     verdict: str,
     summary: str,
 ) -> None:
+    """Write one markdown section with relative links into rule-validation.md."""
     prompt_link = relpath(validation_file, scenario_dir / "prompt.txt")
     a_link = relpath(validation_file, scenario_dir / "result-A.txt")
     b_link = relpath(validation_file, scenario_dir / "result-B.txt")
@@ -66,6 +73,7 @@ def append_entry(
 
 
 def main() -> int:
+    """CLI: append validation entry; print path to rule-validation.md."""
     p = argparse.ArgumentParser()
     p.add_argument("--repo-root", required=True)
     p.add_argument("--rule-path", required=True)
