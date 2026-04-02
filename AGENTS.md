@@ -93,7 +93,13 @@ Defined in `.cursor/rules/*.mdc` — categories include architecture, convention
 
 ## Skills
 
-- `build-verify`, `codebase-explore`, `memory-bank-update`, `excalidraw-ref`, `rule-ab-test` — see `.cursor/skills/`.
+See `.cursor/skills/` for full playbooks.
+
+- **build-verify** — run `yarn build` after risky edits; fix compile errors without shortcuts.
+- **codebase-explore** — map unfamiliar areas of the monorepo before changing code.
+- **memory-bank-update** — keep `docs/memory/*` and `docs/technical/*` aligned after non-trivial work.
+- **rule-ab-test** — A/B validation for one `.mdc` rule; record results in `docs/technical/rule-validation.md`.
+- **excalidraw-ref** — reference layout and patterns for this Fwdays Day 02 homework fork.
 
 ## Memory Bank
 
