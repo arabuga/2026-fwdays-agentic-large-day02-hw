@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import date
+import re
 from pathlib import Path
 import sys
 
@@ -70,21 +71,41 @@ def main() -> int:
     p.add_argument("--test-date", default=date.today().isoformat())
     args = p.parse_args()
 
+    if not re.fullmatch(r"[a-zA-Z0-9._-]+", args.scenario):
+        print(
+            "ERROR: --scenario must match [a-zA-Z0-9._-]+ (no path separators)",
+            file=sys.stderr,
+        )
+        return 1
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", args.test_date):
+        print(
+            "ERROR: --test-date must be YYYY-MM-DD",
+            file=sys.stderr,
+        )
+        return 1
+
     repo = Path(args.repo_root).resolve()
     rule_path = Path(args.rule_path)
     prompt_src = Path(args.prompt_file).resolve()
 
-    if not prompt_src.exists():
+    if not prompt_src.is_file():
         print(f"ERROR: Prompt file not found: {prompt_src}", file=sys.stderr)
         return 1
 
     rule_dir = rule_dir_name(rule_path)
 
-    ab_root = repo / "docs" / "technical" / "ab-tests"
-    scenario_dir = ab_root / rule_dir / f"{args.test_date}-{args.scenario}"
+    ab_root = (repo / "docs" / "technical" / "ab-tests").resolve()
+    scenario_dir = (ab_root / rule_dir / f"{args.test_date}-{args.scenario}").resolve()
+    try:
+        scenario_dir.relative_to(ab_root / rule_dir)
+    except ValueError:
+        print("ERROR: Scenario path escapes ab-tests directory", file=sys.stderr)
+        return 1
     scenario_dir.mkdir(parents=True, exist_ok=True)
 
-    (ab_root / "README.md").write_text(README_TEXT, encoding="utf-8")
+    readme_path = ab_root / "README.md"
+    if not readme_path.exists():
+        readme_path.write_text(README_TEXT, encoding="utf-8")
     (scenario_dir / "prompt.txt").write_text(
         prompt_src.read_text(encoding="utf-8"),
         encoding="utf-8",

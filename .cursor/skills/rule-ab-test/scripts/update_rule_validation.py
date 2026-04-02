@@ -6,6 +6,7 @@ prompt, result A/B, and notes for the given scenario directory."""
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import sys
 
@@ -31,7 +32,6 @@ def ensure_file(path: Path) -> None:
 
 def relpath(from_file: Path, to_file: Path) -> str:
     """POSIX relative path from from_file's directory to to_file."""
-    import os
     return Path(os.path.relpath(to_file.resolve(), from_file.parent.resolve())).as_posix()
 
 
@@ -81,7 +81,7 @@ def main() -> int:
     p.add_argument(
         "--result",
         required=True,
-        choices=["effective", "partially effective", "ineffective", "pending"],
+        choices=["effective", "partially effective", "ineffective"],
     )
     p.add_argument("--summary", required=True)
     args = p.parse_args()
@@ -98,6 +98,8 @@ def main() -> int:
 
     rule_name = Path(args.rule_path).name
     if rule_name.endswith(".mdc.off"):
+        rule_name = rule_name[:-8]
+    elif rule_name.endswith(".mdc"):
         rule_name = rule_name[:-4]
 
     append_entry(
